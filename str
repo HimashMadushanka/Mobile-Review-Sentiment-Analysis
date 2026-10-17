@@ -1,0 +1,51 @@
+AI-Powered-Social-Media-Sentiment-Analysis/
+│
+├── data/
+│   ├── raw/
+│   ├── interim/
+│   └── processed/
+│       ├── train.csv
+│       ├── validation.csv
+│       └── test.csv
+│
+├── notebooks/
+│   ├── 01_Data_Understanding.ipynb
+│   ├── 02_Data_Cleaning_and_Preprocessing.ipynb
+│   ├── 03_Exploratory_Data_Analysis.ipynb
+│   ├── 04_Text_Tokenization.ipynb
+│   ├── 05_TF_IDF_Feature_Extraction.ipynb
+│   ├── 06_Traditional_ML_Models.ipynb
+│   ├── 07_BERT_Fine_Tuning.ipynb
+│   ├── 08_Model_Evaluation_and_Comparison.ipynb
+│   ├── 09_Error_Analysis.ipynb
+│   └── 10_Final_Prediction_Demo.ipynb
+│
+├── src/
+│   ├── __init__.py
+│   ├── data_preprocessing.py
+│   ├── model_utils.py
+│   └── evaluation.py
+│
+├── models/
+│   ├── traditional_ml/
+│   └── bert/
+│
+├── app/
+│   └── streamlit_app.py
+│
+├── outputs/
+│   ├── figures/
+│   ├── predictions/
+│   └── evaluation/
+│
+├── tests/
+│   └── test_preprocessing.py
+│
+├── docs/
+│   ├── project_report.pdf
+│   └── demo_screenshots/
+│
+├── requirements.txt
+├── .gitignore
+├── .env.example
+└── README.md
