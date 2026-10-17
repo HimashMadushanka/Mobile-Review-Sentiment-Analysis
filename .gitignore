@@ -1,0 +1,38 @@
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# VS Code settings
+.vscode/
+
+# Downloaded datasets and generated data
+data/raw/*
+data/processed/*
+
+# Keep folder structure in Git
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model files
+*.pt
+*.pth
+*.pkl
+*.joblib
+*.h5
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
