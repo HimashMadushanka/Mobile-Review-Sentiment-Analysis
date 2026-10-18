@@ -23,12 +23,16 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
-# Model files
+# Model files, weights, and checkpoints
+models/
 *.pt
 *.pth
 *.pkl
 *.joblib
 *.h5
+*.safetensors
+*.bin
+checkpoint-*/
 
 # Logs
 *.log
