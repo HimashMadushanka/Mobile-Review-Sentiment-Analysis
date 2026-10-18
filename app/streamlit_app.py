@@ -1,12 +1,16 @@
+import sys
 from pathlib import Path
 import joblib
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
-MODEL_PATH = (
-    ROOT / "models" / "traditional_ml" / "best_tfidf_model.joblib"
-)
+from src.data_preprocessing import clean_text
+
+MODEL_PATH = ROOT / "models" / "traditional_ml" / "best_tfidf_model.joblib"
+if not MODEL_PATH.exists():
+    MODEL_PATH = ROOT / "models" / "logistic_regression.pkl"
 
 st.set_page_config(
     page_title="Sentiment Analyzer",
@@ -39,6 +43,7 @@ if st.button("Predict Sentiment"):
         st.error("Please enter a review.")
 
     else:
-        prediction = model.predict([review])[0]
+        cleaned_review = clean_text(review)
+        prediction = model.predict([cleaned_review])[0]
 
         st.success(f"Predicted sentiment: {prediction}")
