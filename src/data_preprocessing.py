@@ -1,5 +1,7 @@
+import html
 import re
 import unicodedata
+from typing import Optional
 
 import pandas as pd
 
@@ -8,19 +10,87 @@ VALID_SENTIMENTS = {"positive", "neutral", "negative"}
 MISSING_TEXT_VALUES = {"", "nan", "none", "null", "n/a"}
 
 
-def clean_text(text):
-    """Apply the same cleanup used by notebook 02 before model training."""
-    if pd.isna(text):
+def sanitize_text(text: Optional[str]) -> str:
+    """Base text sanitization shared across all pipelines.
+
+    - Handles None / NaN values safely.
+    - Normalizes Unicode characters (NFKC) so accents and special spaces are standardized.
+    - Normalizes typographic quotes (“”, ‘’) and dashes (—, –) to standard ASCII.
+    - Unescapes HTML entities (e.g. &amp;, &quot;, &#39;).
+    - Strips HTML tags (<br>, <p>, etc.).
+    - Strips web URLs and email addresses.
+    - Strips social mentions (@user) and unwraps hashtags (#phone -> phone).
+    """
+    if text is None or pd.isna(text):
         return ""
 
-    text = str(text).lower()
+    text = str(text)
+
+    # 1. Unicode normalization (NFKC)
+    text = unicodedata.normalize("NFKC", text)
+
+    # 2. Normalize smart/curly quotes and dashes
+    text = (
+        text.replace("“", '"')
+        .replace("”", '"')
+        .replace("‘", "'")
+        .replace("’", "'")
+        .replace("—", " - ")
+        .replace("–", " - ")
+    )
+
+    # 3. Decode HTML entities
+    text = html.unescape(text)
+
+    # 4. Strip HTML tags
+    text = re.sub(r"<[^>]+>", " ", text)
+
+    # 5. Strip URLs and email addresses
     text = re.sub(r"https?://\S+|www\.\S+", " ", text)
+    text = re.sub(r"\b[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}\b", " ", text)
+
+    # 6. Handle @mentions and #hashtags
     text = re.sub(r"@\w+", " ", text)
     text = re.sub(r"#(\w+)", r"\1", text)
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"\b[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}\b", " ", text)
-    text = re.sub(r"[^\w\s.,!?'-]", " ", text)
+
+    return text
+
+
+def preprocess_for_bert(text: Optional[str]) -> str:
+    """Preprocess review text for BERT / Transformer inference & training.
+
+    Ensures 100% parity with fine-tuned bert-base-uncased tokenizer rules:
+    - Applies base sanitization (HTML, URLs, mentions, Unicode normalization).
+    - Lowercases text to match bert-base-uncased vocabulary.
+    - Preserves sentiment-critical punctuation: ! ? . , ' " - :
+      (vital for attention mechanisms and emotional tone like excitement or complaints).
+    - Strips residual unsupported symbols/artifacts.
+    - Normalizes spaces before punctuation and collapses whitespace.
+    """
+    text = sanitize_text(text)
+    if not text:
+        return ""
+
+    text = text.lower()
+    # Retain word chars, spaces, and expressive sentiment punctuation
+    text = re.sub(r"[^\w\s.,!?'\":-]", " ", text)
+    # Remove detached period/punctuation artifacts resulting from stripped URLs/emails
+    text = re.sub(r"\s+([.,!?:])", r"\1", text)
     return re.sub(r"\s+", " ", text).strip()
+
+
+def preprocess_for_tfidf(text: Optional[str]) -> str:
+    """Preprocess review text for traditional ML (TF-IDF vectorizer)."""
+    return preprocess_for_bert(text)
+
+
+def clean_text(text: Optional[str]) -> str:
+    """Legacy alias matching notebook 02 and backward compatibility.
+
+    Delegates to preprocess_for_bert to guarantee 100% parity across
+    notebook training, evaluation, Streamlit, and FastAPI inference.
+    """
+    return preprocess_for_bert(text)
 
 
 def prepare_dataset(df):

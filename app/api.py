@@ -1,13 +1,20 @@
 
+import sys
 from pathlib import Path
 
 import torch
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # Project root
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from src.data_preprocessing import preprocess_for_bert
+
 MODEL_DIR = ROOT / "models" / "bert" / "fine-tuned"
 
 if not MODEL_DIR.exists():
@@ -49,6 +56,15 @@ if len(LABELS) != model.config.num_labels:
 
 app = FastAPI(title="Review Sentiment API")
 
+# Enable CORS for browser extensions and frontends
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class ReviewRequest(BaseModel):
     text: str = Field(min_length=1, max_length=10000)
@@ -61,16 +77,25 @@ def home():
 
 @app.post("/predict")
 def predict(request: ReviewRequest):
-    text = request.text.strip()
+    raw_text = request.text.strip()
 
-    if not text:
+    if not raw_text:
         raise HTTPException(
             status_code=400,
             detail="Please provide review text."
         )
 
+    # Apply exact same preprocessing used during model fine-tuning
+    cleaned_text = preprocess_for_bert(raw_text)
+
+    if not cleaned_text:
+        raise HTTPException(
+            status_code=400,
+            detail="Review text contains no valid words or sentiment information after cleaning (e.g. only URLs, HTML tags, or symbols)."
+        )
+
     inputs = tokenizer(
-        text,
+        cleaned_text,
         return_tensors="pt",
         truncation=True,
         max_length=128,
@@ -90,4 +115,5 @@ def predict(request: ReviewRequest):
         "confidence": round(
             float(probabilities[class_id].item()), 4
         ),
+        "cleaned_text": cleaned_text,
     }

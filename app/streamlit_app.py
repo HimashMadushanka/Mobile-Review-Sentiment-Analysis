@@ -41,9 +41,13 @@ with sentiment_tab:
         if not review.strip():
             st.error("Please enter a review.")
         else:
-            features = vectorizer.transform([clean_text(review)])
-            prediction = model.predict(features)[0]
-            st.success(f"Predicted sentiment: {prediction}")
+            cleaned_review = clean_text(review)
+            if not cleaned_review:
+                st.warning("Review contains no valid words or sentiment information after cleaning.")
+            else:
+                features = vectorizer.transform([cleaned_review])
+                prediction = model.predict(features)[0]
+                st.success(f"Predicted sentiment: {prediction}")
 
 with search_tab:
     st.write("Search Google for product pages and customer reviews.")
