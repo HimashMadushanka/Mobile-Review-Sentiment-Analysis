@@ -1,61 +1,26 @@
-import html
 import re
 import unicodedata
 
 import pandas as pd
 
 
-VALID_SENTIMENTS = {"Positive", "Neutral", "Negative"}
+VALID_SENTIMENTS = {"positive", "neutral", "negative"}
 MISSING_TEXT_VALUES = {"", "nan", "none", "null", "n/a"}
 
 
-CONTRACTIONS = {
-    r"can\'t": "cannot",
-    r"won\'t": "will not",
-    r"n\'t": " not",
-    r"\'re": " are",
-    r"\'s": " is",
-    r"\'d": " would",
-    r"\'ll": " will",
-    r"\'t": " not",
-    r"\'ve": " have",
-    r"\'m": " am",
-}
-
-
 def clean_text(text):
+    """Apply the same cleanup used by notebook 02 before model training."""
     if pd.isna(text):
         return ""
 
-    text = str(text)
-
-    # 1. Decode HTML entities first so characters like &nbsp; become real spaces
-    text = html.unescape(text)
-
-    # 2. Normalize Unicode (NFKC) and lowercase
-    text = unicodedata.normalize("NFKC", text).casefold()
-
-    # 3. Remove HTML markup, control characters, URLs, and handles
-    text = re.sub(r"<[^>]+>", " ", text)
-    text = re.sub(r"[\x00-\x1f\x7f\u200b\ufeff\xa0]", " ", text)
+    text = str(text).lower()
     text = re.sub(r"https?://\S+|www\.\S+", " ", text)
     text = re.sub(r"@\w+", " ", text)
     text = re.sub(r"#(\w+)", r"\1", text)
-
-    # 4. Expand contractions to preserve sentiment negations (e.g., don't -> do not)
-    for pattern, replacement in CONTRACTIONS.items():
-        text = re.sub(pattern, replacement, text)
-
-    # 5. Compress elongated characters (e.g., 'sooooo' -> 'soo')
-    text = re.sub(r"(.)\1{2,}", r"\1\1", text)
-
-    # 6. Pad sentiment-critical punctuation (! and ?) so they are captured as tokens
-    text = re.sub(r"([!?]+)", r" \1 ", text)
-
-    # 7. Normalize whitespace
-    text = re.sub(r"\s+", " ", text).strip()
-
-    return text
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"\b[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}\b", " ", text)
+    text = re.sub(r"[^\w\s.,!?'-]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def prepare_dataset(df):
@@ -74,7 +39,7 @@ def prepare_dataset(df):
         if not pd.isna(value) else pd.NA
     )
     df["sentiment"] = df["sentiment"].map(
-        lambda value: str(value).strip().casefold().title()
+        lambda value: str(value).strip().casefold()
         if not pd.isna(value) else pd.NA
     )
 
