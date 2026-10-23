@@ -1,0 +1,26 @@
+
+{
+  "manifest_version": 3,
+  "name": "AI Review Sentiment Detector",
+  "version": "1.0.0",
+  "description": "Predict the sentiment of selected online reviews using a trained BERT model.",
+  "permissions": [],
+  "host_permissions": [
+    "http://127.0.0.1:8000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
