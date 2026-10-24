@@ -1,0 +1,39 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Git files
+.git/
+.gitignore
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Local environment files and secrets
+.env
+.env.*
+
+# Test and editor cache
+.pytest_cache/
+.vscode/
+
+# Dataset files are not needed by the prediction API
+data/
+
+# Training notebooks are not needed by the prediction API
+notebooks/
+
+# Outputs are not needed by the prediction API
+outputs/
+
+# Documentation is not needed by the prediction API
+docs/
+
+# Existing Streamlit application is not needed by the API container
+app/streamlit_app.py

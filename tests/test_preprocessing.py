@@ -4,7 +4,9 @@ from src.data_preprocessing import (
     preprocess_for_bert,
     preprocess_for_tfidf,
     clean_text,
+    prepare_dataset,
 )
+import pandas as pd
 
 
 class TestPreprocessing(unittest.TestCase):
@@ -43,6 +45,42 @@ class TestPreprocessing(unittest.TestCase):
         self.assertEqual(preprocess_for_bert(None), "")
         self.assertEqual(preprocess_for_bert("https://example.com <br/> @someone"), "")
 
+    def test_prepare_dataset_valid(self):
+        raw_df = pd.DataFrame({
+            "review_text": ["Super fast phone with good camera!", "Terrible display quality."],
+            "sentiment": ["positive", "negative"],
+            "rating": [5, 1],
+        })
+        cleaned = prepare_dataset(raw_df)
+        self.assertEqual(len(cleaned), 2)
+        self.assertIn("clean_text", cleaned.columns)
+        self.assertEqual(cleaned.loc[0, "sentiment"], "positive")
+
+    def test_prepare_dataset_missing_column(self):
+        raw_df = pd.DataFrame({"review_text": ["Good"]})
+        with self.assertRaises(ValueError):
+            prepare_dataset(raw_df)
+
+    def test_prepare_dataset_filters_invalid_sentiment_and_empty_text(self):
+        raw_df = pd.DataFrame({
+            "review_text": [
+                "Valid review",
+                "Another valid review",
+                "https://empty.com",
+                None,
+            ],
+            "sentiment": [
+                "positive",
+                "invalid_sentiment",
+                "positive",
+                "positive",
+            ],
+        })
+        cleaned = prepare_dataset(raw_df)
+        self.assertEqual(len(cleaned), 1)
+        self.assertEqual(cleaned.iloc[0]["review_text"], "Valid review")
+
 
 if __name__ == "__main__":
     unittest.main()
+

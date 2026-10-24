@@ -15,12 +15,17 @@ __pycache__/
 # VS Code settings
 .vscode/
 
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
 # Downloaded datasets and generated data
 data/raw/*
+data/interim/*
 data/processed/*
 
 # Keep folder structure in Git
 !data/raw/.gitkeep
+!data/interim/.gitkeep
 !data/processed/.gitkeep
 
 # Model files, weights, and checkpoints

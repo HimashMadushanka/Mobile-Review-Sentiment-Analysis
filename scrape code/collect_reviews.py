@@ -5,9 +5,7 @@ import json
 import requests
 import pandas as pd
 
-# ==========================================
-# 1. CONFIGURATION
-# ==========================================
+#  CONFIGURATION
 
 URL = (
     "https://snap.stanford.edu/data/amazon/productGraph/"
@@ -34,33 +32,26 @@ OUTPUT_FILE = os.path.join(
 
 TARGET_ROWS = 20000
 
-# ==========================================
-# 2. DOWNLOAD DATASET
-# ==========================================
+#  DOWNLOAD DATASET (IF NOT ALREADY PRESENT)
+if not os.path.exists(COMPRESSED_FILE) or os.path.getsize(COMPRESSED_FILE) == 0:
+    print("Downloading Amazon mobile reviews...")
+    with requests.get(URL, stream=True, timeout=120) as response:
+        response.raise_for_status()
+        with open(COMPRESSED_FILE, "wb") as file:
+            for chunk in response.iter_content(chunk_size=1024 * 1024):
+                if chunk:
+                    file.write(chunk)
+    print("Download completed!")
+else:
+    print(f"Dataset already exists at {COMPRESSED_FILE}, skipping download.")
 
-print("Downloading Amazon mobile reviews...")
-
-with requests.get(URL, stream=True, timeout=120) as response:
-    response.raise_for_status()
-
-    with open(COMPRESSED_FILE, "wb") as file:
-        for chunk in response.iter_content(
-            chunk_size=1024 * 1024
-        ):
-            if chunk:
-                file.write(chunk)
-
-print("Download completed!")
 print(
     "Compressed size:",
     round(os.path.getsize(COMPRESSED_FILE) / (1024 * 1024), 2),
     "MB"
 )
 
-# ==========================================
-# 3. READ UP TO 20,000 UNIQUE REVIEWS
-# ==========================================
-
+#  READ UP TO 20,000 UNIQUE REVIEWS
 reviews = []
 seen_texts = set()
 
@@ -112,15 +103,12 @@ with gzip.open(
 if not reviews:
     raise ValueError("No valid reviews were collected.")
 
-# ==========================================
-# 4. CREATE DATAFRAME
-# ==========================================
 
+#  CREATE DATAFRAME
 df = pd.DataFrame(reviews)
 
-# ==========================================
-# 5. CREATE SENTIMENT LABELS
-# ==========================================
+
+#  CREATE SENTIMENT LABELS
 
 def get_sentiment(rating):
     if rating <= 2:
@@ -131,9 +119,8 @@ def get_sentiment(rating):
 
 df["sentiment"] = df["rating"].apply(get_sentiment)
 
-# ==========================================
-# 6. KEEP FIVE REQUIRED COLUMNS
-# ==========================================
+
+#  KEEP FIVE REQUIRED COLUMNS
 
 df = df[
     [
@@ -145,20 +132,16 @@ df = df[
     ]
 ]
 
-# ==========================================
-# 7. SAVE CSV
-# ==========================================
 
+#  SAVE CSV
 df.to_csv(
     OUTPUT_FILE,
     index=False,
     encoding="utf-8-sig"
 )
 
-# ==========================================
-# 8. DISPLAY RESULTS
-# ==========================================
 
+#  DISPLAY RESULTS
 print("\n===================================")
 print("DATA COLLECTION COMPLETED")
 print("===================================")

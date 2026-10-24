@@ -1,134 +1,242 @@
-# 📱 AI-Powered Mobile Review Sentiment Analysis & Live Chrome Extension
+# 📱 Mobile Review Sentiment Analysis & Live Chrome Extension
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Transformers](https://img.shields.io/badge/HuggingFace-BERT-yellow.svg?logo=huggingface&logoColor=black)](https://huggingface.co/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.40%2B-FF4B4B.svg?logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Chrome Extension](https://img.shields.io/badge/Chrome_Extension-Manifest_V3-4285F4.svg?logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg?logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-EE4C2C.svg?logo=pytorch&logoColor=white)
+![Transformers](https://img.shields.io/badge/Transformers-BERT-yellow.svg?logo=huggingface)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688.svg?logo=fastapi&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B.svg?logo=streamlit&logoColor=white)
+![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-Manifest%20V3-4285F4.svg?logo=googlechrome&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-An end-to-end, production-grade Natural Language Processing (NLP) system designed to analyze and predict customer sentiment from mobile product reviews. This project benchmarks **fine-tuned Transformer architectures (`bert-base-uncased`)** against **classical machine learning baselines (TF-IDF + Logistic Regression)**, deployed through an asynchronous **FastAPI microservice**, an interactive **Streamlit Studio**, and a real-time **Google Chrome Extension (Manifest V3)** for live on-page review scoring.
+An end-to-end **Natural Language Processing (NLP) and Machine Learning system** designed to analyze customer sentiment from mobile product reviews.
+
+The project combines a fine-tuned BERT model, a traditional TF-IDF and Logistic Regression baseline, a FastAPI inference service, an interactive Streamlit dashboard, and a Chrome Extension that provides real-time sentiment analysis while browsing supported e-commerce websites.
 
 ---
 
-## 🏛️ Comprehensive System Architecture
+## 📌 Table of Contents
 
-The following diagram illustrates the complete end-to-end data flow, training pipeline, and multi-client serving architecture:
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [System Architecture](#-system-architecture)
+- [Technologies Used](#-technologies-used)
+- [Project Structure](#-project-structure)
+- [Dataset](#-dataset)
+- [Data Preprocessing](#-data-preprocessing)
+- [Model Development](#-model-development)
+- [Model Evaluation](#-model-evaluation)
+- [Backend API](#-backend-api)
+- [Streamlit Dashboard](#-streamlit-dashboard)
+- [Chrome Extension](#-chrome-extension)
+- [Installation](#-installation)
+- [Running the Application](#-running-the-application)
+- [Docker Deployment](#-docker-deployment)
+- [Testing](#-testing)
+- [Future Improvements](#-future-improvements)
+- [License](#-license)
+
+---
+
+## 🚀 Overview
+
+Online customer reviews contain valuable information about product quality, customer satisfaction, and purchasing decisions. However, manually reading large numbers of reviews is time-consuming and makes it difficult to identify common customer opinions.
+
+This project addresses that problem through an automated sentiment analysis system.
+
+It uses Natural Language Processing and machine learning techniques to classify review text into three sentiment categories:
+
+- 😊 **Positive**
+- 😐 **Neutral**
+- 😠 **Negative**
+
+The system provides two complementary prediction approaches:
+
+1. **BERT-based sentiment classification:** A fine-tuned transformer model designed to understand contextual meaning in review text.
+2. **Traditional machine learning classification:** A TF-IDF feature extraction pipeline combined with Logistic Regression for efficient sentiment prediction.
+
+The trained models are integrated into a FastAPI backend and connected to a Streamlit dashboard and a Chrome Extension.
+
+The result is a complete workflow covering data collection, preprocessing, model training, evaluation, API development, and user-facing deployment.
+
+---
+
+## ✨ Key Features
+
+### 1. Automated Review Collection
+
+- Collects mobile product review data.
+- Stores review text and relevant metadata.
+- Supports preprocessing before model training.
+- Organizes raw and processed datasets separately.
+
+### 2. Text Preprocessing
+
+- Unicode normalization using NFC.
+- HTML entity and tag handling.
+- Whitespace normalization.
+- Removal of unnecessary noise.
+- Preservation of important punctuation and sentiment information.
+- Consistent preprocessing between training and inference.
+
+### 3. Dual-Model Sentiment Analysis
+
+**BERT model**
+- Uses a fine-tuned BERT transformer.
+- Captures contextual meaning in review text.
+- Predicts sentiment probabilities.
+- Supports detailed evaluation using classification metrics.
+
+**TF-IDF and Logistic Regression**
+- Converts review text into numerical features.
+- Uses a Logistic Regression classifier.
+- Provides a lightweight alternative for low-latency inference.
+- Serves as a traditional machine learning baseline.
+
+### 4. FastAPI Backend
+
+- Provides REST API endpoints for predictions.
+- Supports asynchronous request handling.
+- Validates request data.
+- Returns structured JSON responses.
+- Provides API documentation through Swagger UI.
+
+### 5. Interactive Streamlit Dashboard
+
+- Provides a user-friendly interface.
+- Accepts review text for sentiment prediction.
+- Displays predicted sentiment and confidence.
+- Supports model comparison and evaluation visualizations.
+
+### 6. Live Chrome Extension
+
+- Uses Chrome Extension Manifest V3.
+- Detects review text on supported shopping websites.
+- Sends review text to the FastAPI backend.
+- Displays sentiment predictions in a floating popup.
+- Shows confidence scores and detected product aspects.
+
+### 7. Evaluation and Testing
+
+- Evaluates model performance using classification metrics.
+- Generates confusion matrices and loss curves.
+- Includes preprocessing tests.
+- Supports API and prediction testing.
+
+### 8. Docker Support
+
+- Provides containerization configuration.
+- Simplifies application deployment.
+- Supports running the backend and dashboard as services.
+
+---
+
+## 🏗️ System Architecture
+
+The system follows a modular architecture consisting of data processing, model development, backend services, and user interfaces.
 
 ```mermaid
 flowchart TD
-    subgraph Data_Pipeline["1. Ingestion & Preprocessing Pipeline"]
-        A[Raw Amazon Mobile Reviews<br/>SNAP Dataset ~20k rows] --> B[Data Collection Script<br/>collect_reviews.py]
-        B --> C[Sanitization Engine<br/>data_preprocessing.py]
-        C -->|Unicode NFKC, HTML Strip, Punctuation Preservation| D[Cleaned Dataset]
-        D --> E[Stratified Split<br/>Train: 80% | Val: 10% | Test: 10%]
-    end
+    A[Raw Mobile Product Reviews] --> B[Data Collection]
+    B --> C[Text Preprocessing]
+    C --> D[Train Validation Test Split]
 
-    subgraph Modeling["2. Machine Learning & Deep Learning Engine"]
-        E --> F[Classical ML Pipeline<br/>N-Gram TF-IDF Vectorizer]
-        F --> G[Logistic Regression Classifier<br/>Hyperparameter Tuned C=2.0]
-        
-        E --> H[Transformer Pipeline<br/>Hugging Face Tokenizer]
-        H --> I[BERT-Base-Uncased Fine-Tuning<br/>PyTorch + HuggingFace Trainer]
-        
-        G --> J[Evaluation & Comparison Benchmark<br/>Accuracy, Macro F1, Precision, Recall]
-        I --> J
-        J --> K[Serialized Artifacts<br/>.joblib & .safetensors]
-    end
+    D --> E[TF-IDF + Logistic Regression]
+    D --> F[Fine-Tuned BERT]
 
-    subgraph Serving["3. Serving & Microservices Layer"]
-        K --> L[FastAPI REST Microservice :8000<br/>api.py]
-        L -->|PyTorch Inference Mode| M[JSON Prediction Endpoint<br/>POST /predict]
-    end
+    E --> G[Model Evaluation]
+    F --> G
 
-    subgraph Clients["4. Multi-Interface Client Applications"]
-        M -->|HTTP REST Client| N[Streamlit Web Studio :8501<br/>streamlit_app.py]
-        M -->|JSON Messaging| O[Chrome Browser Extension<br/>Manifest V3]
-        
-        N --> N1[Single Review Inspector]
-        N --> N2[Batch CSV Processor]
-        N --> N3[Live Google Search]
-        
-        O --> O1[Background Service Worker<br/>background.js]
-        O1 --> O2[Content Script<br/>content.js]
-        O2 --> O3[Live On-Page Floating UI<br/>Amazon, Daraz, Google, Reddit]
-    end
+    G --> H[Saved Models and Artifacts]
+    H --> I[FastAPI Inference Service]
 
-    subgraph Orchestration["5. Unified Orchestration"]
-        P[run.py<br/>One-Command Process Manager] -->|Launches| L
-        P -->|Launches| N
-    end
+    I --> J[Streamlit Dashboard]
+    I --> K[Chrome Extension]
+
+    K --> L[Live Review Detection]
+    L --> M[Sentiment Popup]
 ```
 
-### Architectural Breakdown:
+### Architecture Components
 
-1. **Ingestion & Preprocessing Layer**:
-   - Ingests raw review data containing customer ratings, timestamps, and unstructured review text.
-   - Executes Unicode NFKC normalization, HTML entity unescaping, hashtag unwrapping, and sentiment-critical punctuation preservation (`!`, `?`, `.`, `,`, `'`).
-   - Guarantees 100% train-serve consistency between training scripts, FastAPI inference, and Streamlit prediction.
-
-2. **Dual-Model Inference Engine**:
-   - **Deep Learning Model**: Fine-tuned `bert-base-uncased` sequence classification model (110M parameters) capturing contextual semantics and syntactic nuance.
-   - **Classical ML Baseline**: Sub-15ms N-gram TF-IDF vectorizer paired with a tuned Logistic Regression classifier for ultra-low latency inference.
-
-3. **Backend Microservice (`FastAPI`)**:
-   - Asynchronous ASGI service listening on `http://127.0.0.1:8000`.
-   - Typed Pydantic schemas validating inputs and handling edge cases (empty strings, HTML noise, excessive payloads).
-   - Cross-Origin Resource Sharing (CORS) middleware enabled for browser extension integration.
-
-4. **Chrome Browser Extension (Manifest V3)**:
-   - Evaluates review text in real-time on live e-commerce websites (Amazon, Daraz, Google Reviews, etc.).
-   - Utilizes a persistent Service Worker (`background.js`) to dispatch asynchronous REST requests to the FastAPI microservice.
-   - Displays a dark glassmorphism floating popup with confidence percentages, animated sentiment tags, and detected aspect chips.
+| Component | Responsibility |
+|---|---|
+| Data Collection | Collects and stores raw customer reviews |
+| Preprocessing | Cleans and normalizes review text |
+| TF-IDF Model | Provides a traditional machine learning baseline |
+| BERT Model | Performs contextual sentiment classification |
+| FastAPI | Serves prediction requests |
+| Streamlit | Provides an interactive analysis dashboard |
+| Chrome Extension | Displays predictions while browsing |
+| Evaluation Scripts | Measures model performance |
+| Docker | Supports containerized deployment |
 
 ---
 
-## 📊 Benchmark & Evaluation Results
+## 🛠️ Technologies Used
 
-Evaluated on an independent, held-out test split of **1,999 reviews** (`negative`, `neutral`, `positive`):
-
-| Model Architecture | Accuracy | Macro Precision | Macro Recall | Macro F1 | Inference Latency |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| 🤖 **Fine-Tuned BERT** (`bert-base-uncased`) | **82.59%** | **0.6849** | **0.6737** | **0.6789** | ~40–80 ms (GPU) |
-| ⚡ **Traditional TF-IDF + Logistic Regression** | 79.49% | 0.6423 | 0.6441 | 0.6429 | **~8–15 ms (CPU)** |
-
-> **Engineering Trade-Off**: BERT achieves higher contextual nuance and superior Macro F1 (+3.6%), while TF-IDF runs in under 15 milliseconds on CPU, demonstrating an understanding of production latency vs. compute cost trade-offs.
-
----
-
-## 📈 Visual Evaluation Artifacts
-
-All publication-quality evaluation figures are automatically computed and saved into [`outputs/figures/`](outputs/figures/):
-
-| Test Set Confusion Matrices | BERT Training & Validation Loss |
-| :---: | :---: |
-| ![Confusion Matrices](outputs/figures/confusion_matrices.png) | ![BERT Loss Curve](outputs/figures/bert_loss_curve.png) |
-
-| Model Comparison Benchmark | Dataset Class Distribution |
-| :---: | :---: |
-| ![Model Comparison](outputs/figures/model_comparison_metrics.png) | ![Sentiment Distribution](outputs/figures/sentiment_distribution.png) |
+| Technology | Purpose |
+|---|---|
+| Python | Main programming language |
+| Pandas | Data manipulation and analysis |
+| NumPy | Numerical operations |
+| Scikit-learn | Traditional machine learning and evaluation |
+| NLTK | Text processing utilities, where required |
+| PyTorch | Deep learning framework |
+| Hugging Face Transformers | BERT model and tokenizer |
+| Hugging Face Datasets | Dataset preparation, where required |
+| FastAPI | REST API development |
+| Uvicorn | ASGI application server |
+| Streamlit | Interactive dashboard |
+| Plotly / Matplotlib | Data visualization |
+| Joblib | Saving and loading traditional ML artifacts |
+| Pytest | Automated testing |
+| Docker | Containerization |
+| HTML, CSS, JavaScript | Chrome Extension interface and behavior |
+| Chrome Extension Manifest V3 | Browser integration |
 
 ---
 
-## 📁 Repository Directory Structure
+## 📂 Project Structure
+
+The following structure represents the project's main components. Keep your actual filenames and folders consistent with your repository.
 
 ```text
 mobile-review-sentiment-analysis/
+│
 ├── app/
-│   ├── api.py                    # FastAPI inference microservice (port 8000)
-│   └── streamlit_app.py          # Streamlit analysis dashboard (port 8501)
+│   └── streamlit_app.py
+│
+├── api/
+│   └── api.py
+│
 ├── browser_extension/
-│   ├── manifest.json             # Chrome Extension Manifest V3 configuration
-│   ├── background.js             # Service worker communicating with FastAPI
-│   └── content.js                # In-page text selection listener & floating popup
+│   ├── manifest.json
+│   ├── background.js
+│   ├── content.js
+│   └── popup/
+│       ├── popup.html
+│       ├── popup.css
+│       └── popup.js
+│
 ├── data/
-│   ├── raw/                      # Downloaded Amazon reviews dataset
-│   └── processed/                # Cleaned train, validation, and test splits
+│   ├── raw/
+│   │   └── mobile_reviews.csv
+│   └── processed/
+│       ├── train.csv
+│       ├── validation.csv
+│       └── test.csv
+│
 ├── models/
-│   ├── traditional_ml/           # Serialized TF-IDF vectorizer & Logistic Regression model
-│   └── bert/fine-tuned/          # Fine-tuned BERT weights, tokenizer, & label encoder
+│   ├── traditional_ml/
+│   │   ├── tfidf_vectorizer.joblib
+│   │   └── logistic_regression.joblib
+│   │
+│   └── bert_fine_tuned/
+│       ├── config.json
+│       ├── model.safetensors
+│       └── tokenizer files
+│
 ├── notebooks/
 │   ├── 01_Data_Understanding.ipynb
 │   ├── 02_Data_Cleaning_and_Preprocessing.ipynb
@@ -140,130 +248,665 @@ mobile-review-sentiment-analysis/
 │   ├── 08_Model_Evaluation_and_Comparison.ipynb
 │   ├── 09_Error_Analysis.ipynb
 │   └── 10_Final_Prediction_Demo.ipynb
-├── outputs/
-│   ├── evaluation/               # Model comparison CSV reports
-│   └── figures/                  # High-resolution evaluation charts
-├── scrape code/
-│   └── collect_reviews.py        # Automated review ingestion pipeline
-├── src/
-│   ├── data_preprocessing.py     # Core sanitization library (train-serve parity)
-│   └── generate_figures.py       # Analytical figure generation script
+│
+├── scripts/
+│   ├── collect_reviews.py
+│   ├── data_preprocessing.py
+│   └── generate_figures.py
+│
 ├── tests/
-│   └── test_preprocessing.py     # Unit test suite for text sanitization
-├── Dockerfile                    # Containerization configuration
-├── requirements.txt              # Pinned Python dependencies
-├── run.py                        # Unified one-command orchestration runner
-└── README.md                     # Project documentation
+│   ├── test_preprocessing.py
+│   └── test_api.py
+│
+├── outputs/
+│   └── figures/
+│
+├── Dockerfile
+├── requirements.txt
+├── README.md
+└── .gitignore
 ```
+
+**Important:** This is a reference structure. If your repository uses different filenames, retain your real filenames and update the documentation accordingly. Do not create empty files or folders simply to match this example.
 
 ---
 
-## 🚀 Quickstart Guide
+## 📊 Dataset
 
-### 1. Clone & Set Up Virtual Environment
+The project uses mobile product reviews for sentiment classification.
 
-```bash
-git clone https://github.com/HimashMadushanka/mobile-review-sentiment-analysis.git
-cd mobile-review-sentiment-analysis
+### Dataset Information
 
-# Create and activate virtual environment
-python -m venv .venv
-# On Windows:
-.venv\Scripts\activate
-# On macOS / Linux:
-source .venv/bin/activate
+| Attribute | Description |
+|---|---|
+| Data type | Customer review text |
+| Main input | Review text |
+| Target | Sentiment label |
+| Sentiment classes | Positive, Neutral, Negative |
+| Data source | Review dataset collected or downloaded for the project |
 
-# Install dependencies
-pip install -r requirements.txt
-```
+The dataset may contain review text, product information, ratings, timestamps, and other metadata, depending on the source.
 
-### 2. Launch the Application (One Command)
+### Dataset Preparation
 
-Start both the **FastAPI backend** and **Streamlit dashboard** simultaneously:
+The data preparation workflow includes:
 
-```bash
-python run.py
-```
+1. Loading the raw dataset.
+2. Checking missing values.
+3. Removing duplicate reviews where appropriate.
+4. Normalizing review text.
+5. Mapping available labels into consistent sentiment classes.
+6. Checking class distribution.
+7. Splitting the dataset into training, validation, and testing sets.
+8. Saving the processed datasets.
 
-- **Streamlit Studio**: [http://localhost:8501](http://localhost:8501)
-- **FastAPI Backend**: [http://127.0.0.1:8000](http://127.0.0.1:8000)
-- **Interactive Swagger API Docs**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+Example split:
 
-*(Press `Ctrl + C` in your terminal to shut down both servers concurrently).*
+| Dataset | Proportion |
+|---|---:|
+| Training | 80% |
+| Validation | 10% |
+| Testing | 10% |
 
----
+Use a stratified split when possible to maintain similar class distributions across the subsets.
 
-## 🌐 Chrome Extension Installation & Live Testing
-
-1. Open Google Chrome and go to `chrome://extensions/`.
-2. Toggle **"Developer mode"** to **ON** (top-right corner).
-3. Click **"Load unpacked"** (top-left corner).
-4. Select the [`browser_extension/`](browser_extension/) folder from this repository.
-5. Navigate to any e-commerce page (e.g. Amazon, Daraz, Google Reviews, GSMArena).
-6. **Highlight any customer review with your cursor** — the AI floating card will immediately pop up displaying:
-   - 🎯 **Sentiment Classification** (`😊 Positive`, `😐 Neutral`, `😞 Negative`)
-   - 📊 **Model Confidence %**
-   - 🏷️ **Detected Aspect Chips** (*Battery*, *Camera*, *Display*, *Performance*, *Price*)
+**Data integrity:** Only report the final number of reviews after verifying the actual dataset. The training, validation, and test sets should not overlap.
 
 ---
 
-## 🔌 API Reference
+## 🧹 Data Preprocessing
 
-### Health Check Endpoint
+Text preprocessing improves consistency and reduces unnecessary noise in customer reviews.
+
+### Main Steps
+
+**1. Missing-value handling**
+
+Identify missing review text and remove or handle invalid records.
+
+**2. Duplicate removal**
+
+Remove duplicate records when appropriate, while avoiding accidental removal of genuinely different reviews.
+
+**3. Unicode normalization**
+
+Normalize text using Unicode NFC to ensure consistent character representation.
+
+**4. HTML cleaning**
+
+Handle HTML entities and tags that may appear in collected reviews.
+
+**5. Whitespace normalization**
+
+Remove unnecessary spaces, tabs, and line breaks.
+
+**6. Sentiment preservation**
+
+Avoid removing meaningful words, negations, and punctuation that may affect sentiment.
+
+For example:
+
+```text
+Original:
+"The phone is NOT good!!!"
+
+Cleaned:
+"The phone is NOT good!!!"
+```
+
+The word `NOT` is important because it changes the meaning of the review.
+
+### Consistent Preprocessing
+
+The same applicable text-processing rules must be used during training and inference.
+
+For BERT, use the tokenizer associated with the fine-tuned model.
+
+For the traditional machine learning model, use the saved TF-IDF vectorizer and apply the same feature extraction pipeline used during training.
+
+---
+
+## 🤖 Model Development
+
+The project compares a traditional machine learning approach with a transformer-based deep learning model.
+
+### 1. TF-IDF + Logistic Regression
+
+This model serves as the traditional machine learning baseline.
+
+#### Workflow
+
+```text
+Review Text
+    ↓
+Text Preprocessing
+    ↓
+TF-IDF Vectorization
+    ↓
+Logistic Regression
+    ↓
+Sentiment Prediction
+```
+
+**TF-IDF** converts text into numerical features based on term frequency and inverse document frequency.
+
+**Logistic Regression** uses these features to predict the sentiment class.
+
+#### Advantages
+
+- Fast inference.
+- Lower computational requirements.
+- Simple to train and evaluate.
+- Useful as a baseline for comparison.
+
+#### Limitations
+
+- Limited understanding of word context.
+- May struggle with complex sentence meaning.
+- Can have difficulty interpreting sarcasm and subtle sentiment.
+
+### 2. Fine-Tuned BERT
+
+The deep learning model uses `bert-base-uncased` as the pretrained transformer architecture.
+
+BERT generates contextual representations of text, helping the classifier understand how a word's meaning changes according to its surrounding words.
+
+#### Workflow
+
+```text
+Review Text
+    ↓
+BERT Tokenizer
+    ↓
+Input IDs and Attention Masks
+    ↓
+Fine-Tuned BERT
+    ↓
+Classification Probabilities
+    ↓
+Positive / Neutral / Negative
+```
+
+#### Training Process
+
+1. Load the pretrained BERT model.
+2. Prepare the labeled dataset.
+3. Tokenize review text.
+4. Fine-tune the classification model.
+5. Monitor validation performance.
+6. Evaluate the final model on held-out test data.
+7. Save the trained model and tokenizer.
+
+#### Advantages
+
+- Context-aware text representation.
+- Better ability to capture relationships between words.
+- Suitable for complex natural language patterns.
+
+#### Limitations
+
+- Higher computational requirements.
+- Longer training time.
+- Larger model size.
+- Inference speed depends on the hardware and deployment environment.
+
+---
+
+## 📈 Model Evaluation
+
+The models should be evaluated using the same held-out test dataset and consistent label definitions.
+
+### Evaluation Metrics
+
+| Metric | Meaning |
+|---|---|
+| Accuracy | Percentage of predictions that are correct |
+| Precision | How many predictions for a class are correct |
+| Recall | How many actual examples of a class are identified |
+| Macro F1-score | Average F1-score across all classes, giving each class equal weight |
+| Confusion Matrix | Shows correct and incorrect predictions by class |
+| Inference Latency | Time taken to generate a prediction |
+
+Macro-averaged metrics are particularly useful when sentiment classes are imbalanced.
+
+### Reported Results
+
+The following BERT results were included in the project notes. Reproduce the evaluation to confirm them before treating them as final results.
+
+| Metric | Fine-Tuned BERT |
+|---|---:|
+| Accuracy | 82.95% |
+| Macro Precision | 0.8694 |
+| Macro Recall | 0.6377 |
+| Macro F1-score | 0.7698 |
+
+The traditional TF-IDF + Logistic Regression model should also be evaluated and reported using its actual test results.
+
+Do not compare models using different test splits or incompatible metric definitions.
+
+### Evaluation Visualizations
+
+The project can generate:
+
+- Confusion matrices.
+- Training and validation loss curves.
+- Model comparison charts.
+- Sentiment class distribution plots.
+- Classification reports.
+
+Store generated figures in the project's output directory.
+
+---
+
+## ⚡ Backend API
+
+The FastAPI service provides an interface for applications that need sentiment predictions.
+
+### Start the API
+
+From the project root, activate your virtual environment and run the API using your actual module path.
+
+For example, if your FastAPI instance is named `app` inside `api/api.py`:
+
+```powershell
+python -m uvicorn api.api:app --host 127.0.0.1 --port 8000 --reload
+```
+
+If your application uses a different file or variable name, adjust the command accordingly.
+
+### API Documentation
+
+Once the server is running, open:
+
+- **Swagger UI:** `http://127.0.0.1:8000/docs`
+- **Alternative API documentation:** `http://127.0.0.1:8000/redoc`
+
+### Health Check
+
+Example endpoint:
+
 ```http
-GET http://127.0.0.1:8000/
+GET /health
 ```
-**Response**:
+
+Example response:
+
 ```json
 {
   "message": "Review Sentiment API is running"
 }
 ```
 
-### Sentiment Prediction Endpoint
-```http
-POST http://127.0.0.1:8000/predict
-Content-Type: application/json
+The exact response depends on your implementation.
 
+### Sentiment Prediction
+
+Example endpoint:
+
+```http
+POST /predict
+```
+
+Example request:
+
+```json
 {
-  "text": "The 200MP camera and AMOLED display are outstanding, but the battery drains fast."
+  "text": "The camera quality is excellent, but the battery drains quickly."
 }
 ```
-**Response**:
+
+Example response:
+
 ```json
 {
   "sentiment": "positive",
-  "confidence": 0.9984,
-  "cleaned_text": "the 200mp camera and amoled display are outstanding, but the battery drains fast."
+  "confidence": 0.85,
+  "cleaned_text": "The camera quality is excellent, but the battery drains quickly."
 }
 ```
+
+**Note:** The endpoint, response fields, sentiment label, and confidence values above are illustrative. Your API should return the actual result produced by your model.
+
+### API Responsibilities
+
+- Validate incoming requests.
+- Handle invalid or empty review text.
+- Load the correct model and tokenizer.
+- Return predictions in JSON format.
+- Handle inference errors.
+- Support requests from the Chrome Extension.
+
+---
+
+## 📊 Streamlit Dashboard
+
+The Streamlit dashboard provides a user-friendly interface for exploring sentiment predictions.
+
+### Start the Dashboard
+
+From the project root, run:
+
+```powershell
+python -m streamlit run app/streamlit_app.py
+```
+
+Open:
+
+`http://localhost:8501`
+
+### Dashboard Features
+
+Depending on the implemented interface, users can:
+
+- Enter individual product reviews.
+- Generate sentiment predictions.
+- View confidence scores.
+- Compare sentiment classifications.
+- Explore model evaluation results.
+- Review sentiment distributions and charts.
+
+The dashboard can use the FastAPI backend for predictions or load model artifacts directly, depending on its implementation.
+
+---
+
+## 🌐 Chrome Extension
+
+The Chrome Extension brings sentiment analysis into the user's browsing experience.
+
+It uses **Manifest V3** and communicates with the FastAPI backend.
+
+### Main Features
+
+- Detects review text on supported product pages.
+- Sends selected review text to the backend.
+- Displays sentiment results in a floating popup.
+- Shows confidence scores.
+- Identifies potential product aspects such as battery, camera, display, performance, and price, if aspect detection is implemented.
+
+### Install the Extension
+
+1. Start the FastAPI backend.
+2. Open Google Chrome.
+3. Navigate to `chrome://extensions/`.
+4. Enable **Developer mode**.
+5. Click **Load unpacked**.
+6. Select the extension directory containing `manifest.json`.
+7. Open a supported product review page.
+8. Test the sentiment analysis feature.
+
+### Extension Workflow
+
+```text
+Customer Review on Webpage
+          ↓
+Chrome Content Script
+          ↓
+Background Service Worker
+          ↓
+FastAPI Prediction Endpoint
+          ↓
+Sentiment Prediction
+          ↓
+Floating Popup
+```
+
+The exact workflow depends on the implementation of your content script and service worker.
+
+### Important Configuration
+
+Ensure the extension's API URL matches the address and port used by FastAPI.
+
+For local development, the backend may run at:
+
+```text
+http://127.0.0.1:8000
+```
+
+Configure the necessary permissions and Content Security Policy settings in `manifest.json`.
+
+Only request browser permissions required by the extension, and handle webpage text and user data responsibly.
+
+---
+
+## ⚙️ Installation
+
+### Prerequisites
+
+Install the following software before running the project:
+
+- Python 3.11 or another version supported by your pinned dependencies.
+- Git.
+- Google Chrome.
+- Optional: Docker Desktop.
+- Optional: NVIDIA GPU and a compatible CUDA-enabled PyTorch build for GPU inference or training.
+
+### 1. Clone the Repository
+
+```powershell
+git clone https://github.com/HimashMadushanka/mobile-review-sentiment-analysis.git
+cd mobile-review-sentiment-analysis
+```
+
+Replace the repository URL if your actual GitHub repository uses a different address.
+
+### 2. Create a Virtual Environment
+
+```powershell
+python -m venv .venv
+```
+
+### 3. Activate the Virtual Environment
+
+For Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation, run the following command for the current terminal session:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+```
+
+Then activate the environment again:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+### 4. Upgrade pip
+
+```powershell
+python -m pip install --upgrade pip
+```
+
+### 5. Install Dependencies
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+If installation fails with a dependency-resolution error, inspect the complete error message before changing package versions.
+
+Useful diagnostic commands:
+
+```powershell
+python --version
+python -m pip show torch transformers fsspec datasets
+python -m pip check
+```
+
+Avoid arbitrarily upgrading or downgrading `fsspec`, PyTorch, Transformers, or Datasets. Choose compatible versions based on the actual dependency constraints in your `requirements.txt`.
+
+### 6. Verify the Installation
+
+```powershell
+python -c "import torch; print('PyTorch:', torch.__version__); print('CUDA available:', torch.cuda.is_available())"
+```
+
+If CUDA is available, verify that PyTorch can detect your GPU:
+
+```powershell
+python -c "import torch; print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'GPU not available to PyTorch')"
+```
+
+The model can also run on a CPU, although training and inference may be slower.
+
+---
+
+## ▶️ Running the Application
+
+Run the services in separate terminal windows, using the same activated virtual environment.
+
+### Terminal 1: Start FastAPI
+
+```powershell
+python -m uvicorn api.api:app --host 127.0.0.1 --port 8000 --reload
+```
+
+### Terminal 2: Start Streamlit
+
+```powershell
+python -m streamlit run app/streamlit_app.py
+```
+
+### Terminal 3: Install and Test the Chrome Extension
+
+1. Open `chrome://extensions/`.
+2. Enable Developer mode.
+3. Load the unpacked extension directory.
+4. Visit a supported product review page.
+5. Select or inspect a review to test the prediction feature.
+
+### Service URLs
+
+| Service | Local URL |
+|---|---|
+| Streamlit Dashboard | `http://localhost:8501` |
+| FastAPI Backend | `http://127.0.0.1:8000` |
+| Swagger UI | `http://127.0.0.1:8000/docs` |
+| ReDoc | `http://127.0.0.1:8000/redoc` |
+
+These commands assume the example paths and application names shown above. Update them to match your repository.
 
 ---
 
 ## 🐳 Docker Deployment
 
-To build and run the entire system inside a Docker container:
+Docker can package the application and its dependencies into a reproducible environment.
 
-```bash
-# Build Docker image
-docker build -t sentiment-analysis-app .
+### Build the Docker Image
 
-# Run container exposing both ports
-docker run -p 8000:8000 -p 8501:8501 sentiment-analysis-app
+```powershell
+docker build -t mobile-review-sentiment-analysis .
 ```
+
+### Run the Container
+
+```powershell
+docker run --rm -p 8000:8000 -p 8501:8501 mobile-review-sentiment-analysis
+```
+
+This command exposes both ports, but the container must actually start both services and listen on an appropriate network interface for both to be accessible.
+
+For a more maintainable deployment, use Docker Compose to run FastAPI and Streamlit as separate services.
+
+**Important:** The commands above require a Dockerfile that supports your application architecture. A Dockerfile that starts only FastAPI will not automatically start Streamlit.
 
 ---
 
-## 🧪 Unit Testing
+## 🧪 Testing
 
-Run the test suite to verify data sanitization edge cases:
+Automated tests help verify preprocessing and API behavior.
 
-```bash
-python -m unittest discover tests/
+### Run the Test Suite
+
+```powershell
+python -m pytest
 ```
+
+### Test Preprocessing
+
+```powershell
+python -m pytest tests/test_preprocessing.py -v
+```
+
+### Test the API
+
+```powershell
+python -m pytest tests/test_api.py -v
+```
+
+These commands assume the test files exist at the specified locations.
+
+### Recommended Test Cases
+
+- Empty review text.
+- Missing input fields.
+- Unicode characters and emojis.
+- HTML entities and tags.
+- Very long reviews.
+- Mixed positive and negative opinions.
+- Valid sentiment predictions.
+- Invalid API requests.
+- Model loading failures.
+- API requests from the Chrome Extension.
+
+---
+
+## 🔒 Security and Reliability
+
+For reliable deployment, consider the following practices:
+
+- Validate all incoming text.
+- Set appropriate request-size limits.
+- Configure CORS for trusted origins rather than allowing every origin unnecessarily.
+- Keep dependencies updated and compatible.
+- Avoid committing API keys or secrets.
+- Do not commit virtual environments or unnecessary model caches.
+- Handle model-loading and prediction errors gracefully.
+- Avoid logging sensitive customer data.
+- Use HTTPS and appropriate authentication for production deployments.
+- Configure browser extension permissions carefully.
+
+---
+
+## 🚧 Future Improvements
+
+Potential future enhancements include:
+
+- Aspect-based sentiment analysis for product features.
+- Multilingual sentiment classification.
+- Improved handling of sarcasm and mixed sentiment.
+- Larger and more diverse evaluation datasets.
+- Model quantization to reduce inference costs.
+- GPU-accelerated inference where beneficial.
+- Prediction history and analytics.
+- Batch review analysis.
+- Model monitoring and drift detection.
+- Automated model retraining.
+- Deployment to a cloud hosting platform.
+- More robust support for different e-commerce websites.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is intended to be released under the **MIT License**.
+
+Before publishing, add a `LICENSE` file containing the complete MIT License text and confirm that the license is appropriate for the project and its dependencies.
+
+---
+
+## 👨‍💻 Author
+
+**Mobile Review Sentiment Analysis & Live Chrome Extension**
+
+An end-to-end NLP project combining machine learning, deep learning, API development, interactive analytics, and browser-based sentiment analysis.
+
+Built with Python, PyTorch, Hugging Face Transformers, FastAPI, Streamlit, and JavaScript.
+
+---
+
+⭐ **If you find this project useful, consider giving the repository a star on GitHub.**

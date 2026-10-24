@@ -186,9 +186,15 @@ function showPopup(state, data = {}) {
 }
 
 function analyzeSelectedReview() {
-  const text = window.getSelection()?.toString().trim() || "";
+  const selection = window.getSelection();
+  const text = selection?.toString().trim() || "";
 
   if (text.length < 3 || text === lastText) {
+    return;
+  }
+
+  // Prevent re-triggering analysis on text selected inside the popup itself
+  if (popup && selection?.anchorNode && popup.contains(selection.anchorNode)) {
     return;
   }
 

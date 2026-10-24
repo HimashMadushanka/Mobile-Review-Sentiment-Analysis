@@ -30,11 +30,17 @@ chrome.runtime.onMessage.addListener(
         });
       })
       .catch((error) => {
+        const isNetworkFailure =
+          error instanceof TypeError ||
+          !error.message ||
+          error.message.includes("Failed to fetch") ||
+          error.message.includes("NetworkError");
+
         sendResponse({
           success: false,
-          error:
-            "Cannot connect to the sentiment API. " +
-            "Check that the API is running."
+          error: isNetworkFailure
+            ? "Cannot connect to the sentiment API. Check that the API is running at http://127.0.0.1:8000."
+            : error.message
         });
       });
 

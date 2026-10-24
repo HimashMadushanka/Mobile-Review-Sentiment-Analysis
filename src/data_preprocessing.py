@@ -102,8 +102,7 @@ def prepare_dataset(df):
 
     df = df.copy()
 
-    # Normalize text and labels before filtering missing values. This catches
-    # actual nulls, whitespace-only fields, and common string placeholders.
+
     df["review_text"] = df["review_text"].map(
         lambda value: unicodedata.normalize("NFKC", str(value)).strip()
         if not pd.isna(value) else pd.NA
@@ -126,7 +125,6 @@ def prepare_dataset(df):
         df["rating"] = pd.to_numeric(df["rating"], errors="coerce")
         df.loc[~df["rating"].between(1, 5), "rating"] = pd.NA
 
-    # Keep repeated review wording: separate customers can write the same
-    # short review, so text-only deduplication can discard valid examples.
+ 
 
     return df.reset_index(drop=True)

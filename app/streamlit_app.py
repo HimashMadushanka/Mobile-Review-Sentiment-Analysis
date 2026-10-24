@@ -161,9 +161,7 @@ def extract_aspects(text: str):
     return aspects
 
 
-# ==============================================================================
 # SIDEBAR: CONFIGURATION
-# ==============================================================================
 with st.sidebar:
     st.subheader("Model Configuration")
 
@@ -190,9 +188,7 @@ with st.sidebar:
         st.caption("Start the backend with `python run.py`")
 
 
-# ==============================================================================
 # MAIN PAGE: HEADER & TABS
-# ==============================================================================
 st.markdown(
     """
     <div class="title-banner">
@@ -204,13 +200,11 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3 = st.tabs(
-    ["Analysis Studio", "Batch Processing", "Live Web Search"]
+tab1, tab2, tab3, tab4 = st.tabs(
+    ["Analysis Studio", "Batch Processing", "Live Web Search", "Model Benchmarks"]
 )
 
-# ------------------------------------------------------------------------------
 # TAB 1: ANALYSIS STUDIO
-# ------------------------------------------------------------------------------
 with tab1:
     col_left, col_right = st.columns([3, 2], gap="large")
 
@@ -312,9 +306,7 @@ with tab1:
             st.info("Enter a review on the left and click **Analyze Review** to view output metrics.")
 
 
-# ------------------------------------------------------------------------------
 # TAB 2: BATCH PROCESSING
-# ------------------------------------------------------------------------------
 with tab2:
     st.markdown("#### Upload Dataset for Bulk Prediction")
     batch_file = st.file_uploader("Upload CSV file:", type=["csv"])
@@ -363,9 +355,7 @@ with tab2:
             st.error(f"Error reading CSV: {ex}")
 
 
-# ------------------------------------------------------------------------------
 # TAB 3: WEB SEARCH
-# ------------------------------------------------------------------------------
 with tab3:
     st.markdown("#### Test Real-World Reviews via Web Search")
     st.caption("Search for live mobile reviews to test with the Chrome Browser Extension.")
@@ -377,3 +367,43 @@ with tab3:
     if search_submitted and search_query.strip():
         search_url = f"https://www.google.com/search?q={quote_plus(search_query.strip())}"
         st.link_button(f"Open Google Search for '{search_query.strip()}'", search_url)
+
+
+# TAB 4: MODEL BENCHMARKS
+with tab4:
+    st.markdown("#### Model Performance Benchmarks & Analytical Visualizations")
+    st.caption("Comprehensive evaluation comparing Fine-Tuned BERT vs. Traditional TF-IDF Baseline.")
+
+    comparison_csv = ROOT / "outputs" / "evaluation" / "final_model_comparison.csv"
+    if comparison_csv.exists():
+        df_comp = pd.read_csv(comparison_csv)
+        st.dataframe(df_comp, use_container_width=True)
+
+    fig_col1, fig_col2 = st.columns(2)
+
+    chart_comparison = FIGURES_DIR / "model_comparison_metrics.png"
+    if chart_comparison.exists():
+        with fig_col1:
+            st.markdown("##### Model Comparison Metrics")
+            st.image(str(chart_comparison), use_container_width=True)
+
+    chart_confusion = FIGURES_DIR / "confusion_matrices.png"
+    if chart_confusion.exists():
+        with fig_col2:
+            st.markdown("##### Confusion Matrices")
+            st.image(str(chart_confusion), use_container_width=True)
+
+    fig_col3, fig_col4 = st.columns(2)
+
+    chart_loss = FIGURES_DIR / "bert_loss_curve.png"
+    if chart_loss.exists():
+        with fig_col3:
+            st.markdown("##### BERT Training Loss Curve")
+            st.image(str(chart_loss), use_container_width=True)
+
+    chart_dist = FIGURES_DIR / "sentiment_distribution.png"
+    if chart_dist.exists():
+        with fig_col4:
+            st.markdown("##### Sentiment Class Distribution")
+            st.image(str(chart_dist), use_container_width=True)
+
