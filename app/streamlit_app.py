@@ -10,7 +10,6 @@ import pandas as pd
 import requests
 import streamlit as st
 
-# Setup Root Directory
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from src.data_preprocessing import clean_text

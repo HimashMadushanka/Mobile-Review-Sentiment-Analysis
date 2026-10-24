@@ -748,7 +748,7 @@ python -c "import torch; print('PyTorch:', torch.__version__); print('CUDA avail
 If CUDA is available, verify that PyTorch can detect your GPU:
 
 ```powershell
-python -c "import torch; print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'GPU not available to PyTorch')"
+python -c "import torch; print(torch.cuda.get_device_name(0if torch.cuda.is_available() else 'GPU not available to PyTorch')"
 ```
 
 The model can also run on a CPU, although training and inference may be slower.
@@ -909,4 +909,4 @@ Built with Python, PyTorch, Hugging Face Transformers, FastAPI, Streamlit, and J
 
 ---
 
-⭐ **If you find this project useful, consider giving the repository a star on GitHub.**
+⭐ **If you find this project useful, consider giving the repository a star on GitHub.*

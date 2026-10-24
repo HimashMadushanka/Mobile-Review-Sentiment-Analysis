@@ -9,7 +9,7 @@ def main():
         [sys.executable, "-m", "uvicorn", "app.api:app", "--host", "127.0.0.1", "--port", "8000"]
     )
 
-    time.sleep(2)  # Wait for API to initialize
+    time.sleep(2)  
 
     print("Starting Streamlit dashboard...")
     dashboard = subprocess.Popen(
