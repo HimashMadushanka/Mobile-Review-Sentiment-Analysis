@@ -21,7 +21,6 @@ The project combines a fine-tuned BERT model, a traditional TF-IDF and Logistic 
 - [Key Features](#-key-features)
 - [System Architecture](#-system-architecture)
 - [Technologies Used](#-technologies-used)
-- [Project Structure](#-project-structure)
 - [Dataset](#-dataset)
 - [Data Preprocessing](#-data-preprocessing)
 - [Model Development](#-model-development)
@@ -195,79 +194,6 @@ flowchart TD
 | HTML, CSS, JavaScript | Chrome Extension interface and behavior |
 | Chrome Extension Manifest V3 | Browser integration |
 
----
-
-## 📂 Project Structure
-
-The following structure represents the project's main components. Keep your actual filenames and folders consistent with your repository.
-
-```text
-mobile-review-sentiment-analysis/
-│
-├── app/
-│   └── streamlit_app.py
-│
-├── api/
-│   └── api.py
-│
-├── browser_extension/
-│   ├── manifest.json
-│   ├── background.js
-│   ├── content.js
-│   └── popup/
-│       ├── popup.html
-│       ├── popup.css
-│       └── popup.js
-│
-├── data/
-│   ├── raw/
-│   │   └── mobile_reviews.csv
-│   └── processed/
-│       ├── train.csv
-│       ├── validation.csv
-│       └── test.csv
-│
-├── models/
-│   ├── traditional_ml/
-│   │   ├── tfidf_vectorizer.joblib
-│   │   └── logistic_regression.joblib
-│   │
-│   └── bert_fine_tuned/
-│       ├── config.json
-│       ├── model.safetensors
-│       └── tokenizer files
-│
-├── notebooks/
-│   ├── 01_Data_Understanding.ipynb
-│   ├── 02_Data_Cleaning_and_Preprocessing.ipynb
-│   ├── 03_Exploratory_Data_Analysis.ipynb
-│   ├── 04_Text_Tokenization.ipynb
-│   ├── 05_TF_IDF_Feature_Extraction.ipynb
-│   ├── 06_Traditional_ML_Models.ipynb
-│   ├── 07_BERT_Fine_Tuning.ipynb
-│   ├── 08_Model_Evaluation_and_Comparison.ipynb
-│   ├── 09_Error_Analysis.ipynb
-│   └── 10_Final_Prediction_Demo.ipynb
-│
-├── scripts/
-│   ├── collect_reviews.py
-│   ├── data_preprocessing.py
-│   └── generate_figures.py
-│
-├── tests/
-│   ├── test_preprocessing.py
-│   └── test_api.py
-│
-├── outputs/
-│   └── figures/
-│
-├── Dockerfile
-├── requirements.txt
-├── README.md
-└── .gitignore
-```
-
-**Important:** This is a reference structure. If your repository uses different filenames, retain your real filenames and update the documentation accordingly. Do not create empty files or folders simply to match this example.
 
 ---
 
@@ -683,7 +609,7 @@ Install the following software before running the project:
 ### 1. Clone the Repository
 
 ```powershell
-git clone https://github.com/HimashMadushanka/mobile-review-sentiment-analysis.git
+git clone https://github.com/HimashMadushanka/Mobile-Review-Sentiment-Analysis
 cd mobile-review-sentiment-analysis
 ```
 
